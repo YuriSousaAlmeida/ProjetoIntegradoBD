@@ -1,0 +1,173 @@
+
+CREATE TABLE CARGOS (
+                CARGO_ID INTEGER NOT NULL,
+                NOME VARCHAR(100) NOT NULL,
+                MIN_SALARIO NUMERIC(255) NOT NULL,
+                MAX_SALARIO NUMERIC(255) NOT NULL,
+                CONSTRAINT cargo_id PRIMARY KEY (CARGO_ID)
+);
+COMMENT ON TABLE CARGOS IS 'Tabela que contém informações sobre os cargos.';
+COMMENT ON COLUMN CARGOS.NOME IS 'Coluna que contém o nome do cargo.';
+COMMENT ON COLUMN CARGOS.MIN_SALARIO IS 'Coluna que contém o salário mínimo do cargo.';
+COMMENT ON COLUMN CARGOS.MAX_SALARIO IS 'Coluna que contém o salário máximo do cargo.';
+
+
+CREATE TABLE DEPARTAMENTOS (
+                DEPARTAMENTO_ID INTEGER NOT NULL,
+                NOME VARCHAR(100) NOT NULL,
+                ANDAR NUMERIC(100) NOT NULL,
+                CONSTRAINT departamento_id PRIMARY KEY (DEPARTAMENTO_ID)
+);
+COMMENT ON TABLE DEPARTAMENTOS IS 'Tabela que contém informações sobre os departamentos.';
+COMMENT ON COLUMN DEPARTAMENTOS.NOME IS 'Coluna que contém o nome do departamento.';
+COMMENT ON COLUMN DEPARTAMENTOS.ANDAR IS 'Coluna que contém o andar do departamento.';
+
+
+CREATE TABLE COLABORADORES (
+                ID_COLABORADOR INTEGER NOT NULL,
+                NOME VARCHAR(255) NOT NULL,
+                EMAIL VARCHAR(255) NOT NULL,
+                DATA_DA_CONTRATACAO DATE NOT NULL,
+                CARGO_ID INTEGER NOT NULL,
+                DEPARTAMENTO_ID INTEGER NOT NULL,
+                SALARIO NUMERIC(255) NOT NULL,
+                CONSTRAINT id_colaborador PRIMARY KEY (ID_COLABORADOR)
+);
+COMMENT ON TABLE COLABORADORES IS 'Tabela que contém informações sobre o colaborador.';
+COMMENT ON COLUMN COLABORADORES.ID_COLABORADOR IS 'Identificação própria do colaborador.';
+COMMENT ON COLUMN COLABORADORES.NOME IS 'Coluna que contém o nome do colaborador.';
+COMMENT ON COLUMN COLABORADORES.DATA_DA_CONTRATACAO IS 'Coluna que contém a data de contratação do colaborador.';
+COMMENT ON COLUMN COLABORADORES.SALARIO IS 'Coluna que contém o salário do colaborador.';
+
+
+CREATE TABLE CURSOS (
+                ID_CURSOS INTEGER NOT NULL,
+                TITULO VARCHAR(100) NOT NULL,
+                DESCRICAO VARCHAR(255) NOT NULL,
+                CARGA_HORARIA INTEGER NOT NULL,
+                DATA_INICIO_CURSO DATE NOT NULL,
+                DATA_FIM_CURSO DATE,
+                ID_COLABORADOR INTEGER NOT NULL,
+                CONSTRAINT id_cursos PRIMARY KEY (ID_CURSOS)
+);
+COMMENT ON TABLE CURSOS IS 'Tabela que contém informações sobre os cursos.';
+COMMENT ON COLUMN CURSOS.ID_CURSOS IS 'Identificação própria do curso.';
+COMMENT ON COLUMN CURSOS.TITULO IS 'Título do curso ofertado.';
+COMMENT ON COLUMN CURSOS.DESCRICAO IS 'Descrição sobre o curso ofertado, contendo informações breves sobre o curso.';
+COMMENT ON COLUMN CURSOS.CARGA_HORARIA IS 'Carga horária do curso ofertado.';
+COMMENT ON COLUMN CURSOS.DATA_INICIO_CURSO IS 'Coluna que contém a data de início do curso.';
+COMMENT ON COLUMN CURSOS.DATA_FIM_CURSO IS 'Coluna que contém a data de fim do curso.';
+COMMENT ON COLUMN CURSOS.ID_COLABORADOR IS 'Identificação própria do colaborador.';
+
+
+CREATE TABLE CERTIFICADOS (
+                CERTIFICADO_ID INTEGER NOT NULL,
+                ID_CURSOS INTEGER NOT NULL,
+                DATA_DE_EMISSAO DATE,
+                CONSTRAINT certificado_id PRIMARY KEY (CERTIFICADO_ID)
+);
+COMMENT ON TABLE CERTIFICADOS IS 'Tabela que contém informações sobre os certificados.';
+COMMENT ON COLUMN CERTIFICADOS.CERTIFICADO_ID IS 'Identificação própria do certificado.';
+COMMENT ON COLUMN CERTIFICADOS.ID_CURSOS IS 'Identificação própria do curso.';
+COMMENT ON COLUMN CERTIFICADOS.DATA_DE_EMISSAO IS 'Coluna que contém a data de emissão do certificado.';
+
+
+CREATE TABLE PONTOS (
+                ID_PONTOS INTEGER NOT NULL,
+                QTD_PONTOS NUMERIC,
+                CERTIFICADO_ID INTEGER NOT NULL,
+                CONSTRAINT id_pontos PRIMARY KEY (ID_PONTOS)
+);
+COMMENT ON TABLE PONTOS IS 'Tabela que contém informações sobre pontos da conclusão do certificado.';
+COMMENT ON COLUMN PONTOS.ID_PONTOS IS 'Identificação própria dos pontos.';
+COMMENT ON COLUMN PONTOS.QTD_PONTOS IS 'Quantidade de pontos que o curso dá.';
+COMMENT ON COLUMN PONTOS.CERTIFICADO_ID IS 'Identificação própria do certificado.';
+
+
+CREATE TABLE RECOMPENSAS (
+                ID_RECOMPENSAS INTEGER NOT NULL,
+                ID_PONTOS INTEGER NOT NULL,
+                PONTOS_NECESSARIOS INTEGER NOT NULL,
+                ILUSTRACAO_RECOMPENSA BYTEA,
+                ID_COLABORADOR INTEGER NOT NULL,
+                CONSTRAINT id_recompensas PRIMARY KEY (ID_RECOMPENSAS)
+);
+COMMENT ON TABLE RECOMPENSAS IS 'Tabela que contém informações sobre recompensas.';
+COMMENT ON COLUMN RECOMPENSAS.ID_RECOMPENSAS IS 'Identificação própria da recompensa.';
+COMMENT ON COLUMN RECOMPENSAS.ID_PONTOS IS 'Identificação própria dos pontos.';
+COMMENT ON COLUMN RECOMPENSAS.PONTOS_NECESSARIOS IS 'Coluna que contém os pontos necessários para tal recompensa.';
+COMMENT ON COLUMN RECOMPENSAS.ILUSTRACAO_RECOMPENSA IS 'Contém a ilustração do tipo BLOB da recompensa.';
+COMMENT ON COLUMN RECOMPENSAS.ID_COLABORADOR IS 'Identificação própria do colaborador.';
+
+
+CREATE TABLE AVALIACOES (
+                ID_CURSOS INTEGER NOT NULL,
+                ID_AVALIACAO INTEGER NOT NULL,
+                DATA_DA_AVALIACAO DATE NOT NULL,
+                COMENTARIOS VARCHAR(255),
+                NOTA_CURSO NUMERIC NOT NULL,
+                CONSTRAINT id_avaliacao PRIMARY KEY (ID_CURSOS, ID_AVALIACAO)
+);
+COMMENT ON TABLE AVALIACOES IS 'Tabela que contém informações sobre as avaliações.';
+COMMENT ON COLUMN AVALIACOES.ID_CURSOS IS 'Identificação própria do curso.';
+COMMENT ON COLUMN AVALIACOES.ID_AVALIACAO IS 'Identificação própria da avaliação.';
+COMMENT ON COLUMN AVALIACOES.DATA_DA_AVALIACAO IS 'Coluna que contém a data da avaliação.';
+COMMENT ON COLUMN AVALIACOES.COMENTARIOS IS 'Coluna que contém comentário do professor sobre a avaliação,';
+COMMENT ON COLUMN AVALIACOES.NOTA_CURSO IS 'Coluna que contém a nota da avaliação.';
+
+
+ALTER TABLE COLABORADORES ADD CONSTRAINT cargo_colaborador_fk
+FOREIGN KEY (CARGO_ID)
+REFERENCES CARGOS (CARGO_ID)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE COLABORADORES ADD CONSTRAINT departamento_colaborador_fk
+FOREIGN KEY (DEPARTAMENTO_ID)
+REFERENCES DEPARTAMENTOS (DEPARTAMENTO_ID)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE CURSOS ADD CONSTRAINT colaborador_cursos_fk
+FOREIGN KEY (ID_COLABORADOR)
+REFERENCES COLABORADORES (ID_COLABORADOR)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE RECOMPENSAS ADD CONSTRAINT colaborador_recompensas_fk
+FOREIGN KEY (ID_COLABORADOR)
+REFERENCES COLABORADORES (ID_COLABORADOR)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE AVALIACOES ADD CONSTRAINT cursos_avaliacao_fk
+FOREIGN KEY (ID_CURSOS)
+REFERENCES CURSOS (ID_CURSOS)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE CERTIFICADOS ADD CONSTRAINT cursos_certificados_fk
+FOREIGN KEY (ID_CURSOS)
+REFERENCES CURSOS (ID_CURSOS)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE PONTOS ADD CONSTRAINT certificados_pontos_fk
+FOREIGN KEY (CERTIFICADO_ID)
+REFERENCES CERTIFICADOS (CERTIFICADO_ID)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
+
+ALTER TABLE RECOMPENSAS ADD CONSTRAINT pontos_recompensas_fk
+FOREIGN KEY (ID_PONTOS)
+REFERENCES PONTOS (ID_PONTOS)
+ON DELETE NO ACTION
+ON UPDATE NO ACTION
+NOT DEFERRABLE;
